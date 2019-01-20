@@ -1,0 +1,21 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 { 
+    text-align: center;
+}
+
+#score {
+    position: absolute;
+    top: 0;
+}
+
