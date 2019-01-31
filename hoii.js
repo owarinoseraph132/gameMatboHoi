@@ -3,16 +3,51 @@ var score = 0;
 document.getElementById("score").innerHTML = `<h3 style="color:red">Score: ${score}</h3>`
 var box = [];
 var boxBlack = [];
-function startGame() {
-    myGamePiece = new component(40, 40, "s.jpg", 225, 225, "image");
-    for (var i = 0; i < 4; i++) {
-        var x = Math.floor(Math.random() * 700) + 1;
-        var y = Math.floor(Math.random() * 500) + 1;
-        box.push(new component(10, 10, "blue", x, y))
+var mySound;
+var myMusic;
+var mymusic;
+
+
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
     }
+    this.stop = function(){
+        this.sound.pause();
+    }
+}
+
+
+var hihi = document.getElementById("choilai");
+console.log(hihi)
+hihi.style.display = 'none';
+
+function restart(){
+    window.location.protocol = 'file:///C:/baicode/index.html'
+}
+hihi.addEventListener("click", restart)
+
+
+function startGame() {
+    mySound = new sound("bounce.mp3");
+    myMusic = new sound("gametheme.mp3");
+    mymusic = new sound("bounce.mp3")
+    myGamePiece = new component(40, 40, "a.png", 225, 225, "image");
+    for (var i = 0; i < 4; i++) {
+        var x = Math.floor(Math.random() * 900) + 1;
+        var y = Math.floor(Math.random() * 500) + 1;
+        box.push(new component(20, 20, "a.jpg", x, y, "image"))
         
+    }
+
     for (var i = 0; i < 6 ; i++) {
-        var x = Math.floor(Math.random() * 700) + 1;
+        var x = Math.floor(Math.random() * 900) + 1;
         var y = Math.floor(Math.random() * 500) + 1;
         // myGamePiece la box do
         //Neu vi tri mygamePiece ma khac voi ca x, y (x,y la sinh random)
@@ -21,18 +56,19 @@ function startGame() {
         if (myGamePiece.x !== x && myGamePiece.y !== y) {
             boxBlack.push(new component(50, 50, "cc.jpg", x, y, "image"))
         } else {
-            var x = Math.floor(Math.random() * 700) + 1;
+            var x = Math.floor(Math.random() * 900) + 1;
             var y = Math.floor(Math.random() * 500) + 1;
             boxBlack.push(new component(50, 50, "cc.jpg", x, y, "image"))
-        }
+        }    
     }
     myGameArea.start();
+
 }
 
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 700;
+        this.canvas.width = 900;
         this.canvas.height = 500;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -90,6 +126,7 @@ function component(width, height, color, x, y, type = undefined) {
         this.angle += this.moveAngle * Math.PI / 180;
         this.x += this.speed * Math.sin(this.angle);
         this.y -= this.speed * Math.cos(this.angle);
+        mymusic.play();
     }
     this.crashWith = function(otherobj) {
         var myleft = this.x;
@@ -141,14 +178,15 @@ function updateGameArea() {
     for (var i = 0; i < boxBlack.length; i++) {
         boxBlack[i].update();
     }
-    
+
+    myMusic.play()
     // Xu ly khi va cham
     for (var i = 0; i < box.length; i++) {
         if (myGamePiece.crashWith(box[i])) {
             // Xu ly login khi va cham voi hop box xanh
             score += 1;
             document.getElementById("score").innerHTML = `<h3 style="color:red">Score: ${score}</h3>`
-            var x = Math.floor(Math.random() * 700) + 1;
+            var x = Math.floor(Math.random() * 900) + 1;
             var y = Math.floor(Math.random() * 500) + 1;
             box[i].x = x;
             box[i].y = y;
@@ -158,8 +196,10 @@ function updateGameArea() {
         if (myGamePiece.crashWith(boxBlack[j])) {
             // Xu ly login khi va cham voi hop box xanh
             document.getElementById("thongbao").innerHTML = "<h4>Game over??? Reset the game to play more</h4>"
+            mySound.play();
             myGameArea.stop();
-            
+            myMusic.stop();
+            hihi.style.display = 'block';
         }
     }  
 
